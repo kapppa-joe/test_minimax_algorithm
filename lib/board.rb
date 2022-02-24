@@ -52,6 +52,9 @@ class Board
   # === minimax logic, to be extracted out later ===
   # ================================================
 
+  def self.score_board(board, player)
+    0
+  end
 
   # =================================================
   # === CLI view logic, to be extracted out later ===

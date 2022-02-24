@@ -133,16 +133,12 @@ describe Board do
   # === minimax logic, to be extracted out later ===
   # ================================================
 
-  # describe '::score_board' do
-  #   let(:score_board) do |board, player|
-  #     described_class.score_board(board, player)
-  #   end
-
-  #   it 'returns an integer' do
-  #     output = score_board('111111111', 1)
-  #     expect(output).to be_an(Integer)
-  #   end
-  # end
+  describe '::score_board' do
+    it 'returns an integer' do
+      output = described_class.score_board('111111111', 1)
+      expect(output).to be_an(Integer)
+    end
+  end
 
   # =================================================
   # === CLI view logic, to be extracted out later ===
