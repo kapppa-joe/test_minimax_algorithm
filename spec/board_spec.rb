@@ -414,26 +414,37 @@ describe Board do
   # === minimax logic, to be extracted out later ===
   # ================================================
 
-  describe '::score_board' do
+  describe 'evaluate_score' do
     it 'returns an integer' do
-      output = described_class.score_board('111111111', 1)
+      board = Board.new('111000000')
+      output = board.evaluate_score(1)
       expect(output).to be_an(Integer)
     end
 
     it 'returns +1 when given board = "111000000" and player = 1' do
-      output = described_class.score_board('111000000', 1)
+      board = Board.new('111000000')
+      player = 1
+      output = board.evaluate_score(player)
       expect(output).to eql 1
     end
 
     it 'returns -1 when given board = "111000000" and player = 2' do
-      output = described_class.score_board('111000000', 2)
+      board = Board.new('111000000')
+      player = 2
+      output = board.evaluate_score(player)
       expect(output).to eql(-1)
     end
 
     it 'returns +1 when given board = "222000000" and player = 2' do
-      output = described_class.score_board('222000000', 2)
-      expect(output).to eql 1
+      board = Board.new('222000000')
+      player = 2
+      output = board.evaluate_score(player)
+      expect(output).to eql(1)
     end
+
+    # it 'return +1 when the return value of Board#winner match player number' do
+    #   output = desc
+    # end
   end
 
   # =================================================

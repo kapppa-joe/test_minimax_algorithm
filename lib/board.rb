@@ -107,8 +107,8 @@ class Board
     nil
   end
 
-  def self.score_board(board, player)
-    if player == board[0].to_i
+  def evaluate_score(player)
+    if player == @board[0].to_i
       1
     else
       -1
