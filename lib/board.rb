@@ -6,6 +6,12 @@ class InvalidInputError < StandardError
     super
   end
 end
+class OccupiedCellError < InvalidInputError
+  MESSAGE = 'Sorry, the cell was already taken'
+  def initialize(msg = MESSAGE)
+    super
+  end
+end
 
 class Board
   def initialize(input_string = '000000000')
@@ -29,6 +35,28 @@ class Board
     @board
   end
 
+  def play_move(player, cell_index)
+    raise InvalidInputError if player != 1 && player != 2
+    raise InvalidInputError unless (0..8).cover?(cell_index)
+
+    if @board[cell_index] != '0'
+      raise OccupiedCellError, "cell #{cell_index} was already taken"
+    end
+
+    new_board_string = @board[0, 9]
+    new_board_string[cell_index] = player.to_s
+    Board.new(new_board_string.freeze)
+  end
+
+  # ================================================
+  # === minimax logic, to be extracted out later ===
+  # ================================================
+
+
+  # =================================================
+  # === CLI view logic, to be extracted out later ===
+  # =================================================
+
   def display_grid
     lines = []
     lines << horizontal_line
@@ -49,5 +77,4 @@ class Board
     a, b, c = row.tr('012', '.XO').chars
     "| #{a} #{b} #{c} |"
   end
-
 end

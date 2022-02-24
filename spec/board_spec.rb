@@ -60,6 +60,95 @@ describe Board do
     end
   end
 
+  describe 'play_move' do
+    it 'return a board' do
+      output = board.play_move(1, 2)
+
+      expect(output).to be_a(Board)
+    end
+
+    it 'return a NEW board' do
+      output = board.play_move(1, 2)
+
+      expect(output.object_id).not_to eql board.object_id
+    end
+
+    it 'do not modify the original board' do
+      original_board_string = board.to_s.freeze
+      board.play_move(1, 2)
+      expect(board.to_s).to eql original_board_string
+    end
+
+    it 'return a board of "100000000" when given (1, 0) and a empty board' do
+      output = board.play_move(1, 0)
+      expect(output.to_s).to eql '100000000'
+    end
+
+    it 'return a board of "200000000" when given (2, 0) and a empty board' do
+      output = board.play_move(2, 0)
+      expect(output.to_s).to eql '200000000'
+    end
+
+    describe 'raise an InvalidInputError if the first input was not integer 1 or 2' do
+      invalid_inputs = [
+        '1', '2', 0, nil, 3, 4, '12', '01', '11', '22', 'abc', [1], [2]
+      ]
+      invalid_inputs.each do |input|
+        it ", first input = #{input.inspect}" do
+          expect { board.play_move(input, 0) }.to raise_error(InvalidInputError)
+        end
+      end
+    end
+
+    describe 'raise an InvalidInputError if the second input was not in range 0..8' do
+      invalid_inputs = [
+        '1', '2', -1, nil, 9, 10, '12', '01', '11', '22', 'abc', [1], [2]
+      ]
+
+      invalid_inputs.each do |input|
+        it ", second input = #{input.inspect}" do
+          expect { board.play_move(1, input) }.to raise_error(InvalidInputError)
+        end
+      end
+    end
+
+    describe 'it insert the 1st input (player number) at the position of 2nd input (cell_index)' do
+      (1..2).each do |player_number|
+        (0..8).each do |cell_index|
+          it "player_number: #{player_number}, cell_index: #{cell_index}" do
+            new_board = board.play_move(player_number, cell_index)
+            expect(new_board.to_s[cell_index]).to eql player_number.to_s
+          end
+        end
+      end
+    end
+
+    it 'raises OccupiedCellError if the cell at cell_index was already taken' do
+      board = Board.new('100000000')
+      expect { board.play_move(2, 0) }.to raise_error(OccupiedCellError, 'cell 0 was already taken')
+    end
+  end
+
+  # ================================================
+  # === minimax logic, to be extracted out later ===
+  # ================================================
+
+  # describe '::score_board' do
+  #   let(:score_board) do |board, player|
+  #     described_class.score_board(board, player)
+  #   end
+
+  #   it 'returns an integer' do
+  #     output = score_board('111111111', 1)
+  #     expect(output).to be_an(Integer)
+  #   end
+  # end
+
+  # =================================================
+  # === CLI view logic, to be extracted out later ===
+  # =================================================
+
+
   describe 'CLI view' do
     describe '#display_grid' do
       it 'return a string of the board as a pretty looking grid' do
