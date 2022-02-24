@@ -125,16 +125,16 @@ class Board
     when opponent_of(player) then return -1
     end
 
-    # when no one has won yet
-    return 0 if self.full?
+    # no winner so far
+    return 0 if self.full? # no winner + board is full = draw game
 
     # start recursion
-    possible_scores =
-      self.empty_cells.map do |cell_index|
+    all_possible_scores =
+      empty_cells.map do |cell_index|
         new_board = play_move(player, cell_index)
         new_board.evaluate_score(opponent_of(player)) * -1
       end
-    possible_scores.max
+    all_possible_scores.max
   end
 
   # =================================================
