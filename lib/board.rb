@@ -48,12 +48,24 @@ class Board
     Board.new(new_board_string.freeze)
   end
 
-  # ================================================
-  # === minimax logic, to be extracted out later ===
-  # ================================================
+  # =============================================
+  # === game logic, to be extracted out later ===
+  # =============================================
+
+  def row(row_number)
+    raise InvalidInputError unless (0..2).cover?(row_number)
+
+    start_index = row_number * 3
+    @board[start_index, 3]
+  end
+
 
   def self.score_board(board, player)
-    0
+    if player == board[0].to_i
+      1
+    else
+      -1
+    end
   end
 
   # =================================================

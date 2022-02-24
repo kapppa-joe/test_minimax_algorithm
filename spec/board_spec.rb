@@ -129,6 +129,40 @@ describe Board do
     end
   end
 
+  describe 'row' do
+    it 'take an integer and return a string' do
+      expect(board.row(0)).to be_a(String)
+    end
+
+    it 'return "000" when the board is empty and given number 0' do
+      expect(board.row(0)).to eql '000'
+    end
+
+    it 'return a string representation of the first row in the board when given number 0' do
+      board = Board.new('012120201')
+      expect(board.row(0)).to eql '012'
+
+      board2 = Board.new('210120201')
+      expect(board2.row(0)).to eql '210'
+    end
+
+    it 'return a string representation of the nth row in the board when given number n' do
+      board = Board.new('012120201')
+      expect(board.row(0)).to eql '012'
+      expect(board.row(1)).to eql '120'
+      expect(board.row(2)).to eql '201'
+    end
+
+    describe 'raise InvalidInputError when given an input not in range 0..2' do
+      test_cases = [-1, 3, 4, nil, '0', '1', '2', 12, 'a', [0], [1]]
+      test_cases.each do |input|
+        it ", input: #{input}" do
+          expect { board.row(input) }.to raise_error(InvalidInputError)
+        end
+      end
+    end
+  end
+
   # ================================================
   # === minimax logic, to be extracted out later ===
   # ================================================
@@ -137,6 +171,21 @@ describe Board do
     it 'returns an integer' do
       output = described_class.score_board('111111111', 1)
       expect(output).to be_an(Integer)
+    end
+
+    it 'returns +1 when given board = "111000000" and player = 1' do
+      output = described_class.score_board('111000000', 1)
+      expect(output).to eql 1
+    end
+
+    it 'returns -1 when given board = "111000000" and player = 2' do
+      output = described_class.score_board('111000000', 2)
+      expect(output).to eql(-1)
+    end
+
+    it 'returns +1 when given board = "222000000" and player = 2' do
+      output = described_class.score_board('222000000', 2)
+      expect(output).to eql 1
     end
   end
 
