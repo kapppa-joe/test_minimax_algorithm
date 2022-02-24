@@ -214,7 +214,7 @@ describe Board do
       expect(board2.diagonal(0)).to eql '101'
     end
 
-    it 'return a string representation of the nth diagonal in the board when given number n' do
+    it 'return a string representation of diagonal in the board when given number 0 (for left-to-right) or 1 (for right-to-left)' do
       board = Board.new('120120120')
       expect(board.diagonal(0)).to eql '120'
       expect(board.diagonal(1)).to eql '021'
@@ -227,6 +227,35 @@ describe Board do
           expect { board.diagonal(input) }.to raise_error(InvalidInputError)
         end
       end
+    end
+  end
+
+  describe '#for_all_rows_columns_diagonals' do
+    it 'yield 8 times' do
+      expect do |block|
+        board.for_all_rows_columns_diagonals(&block)
+      end.to yield_control.exactly(8).times
+    end
+
+    it 'yield with string "000" for 8 times for an empty board' do
+      expected_args = ['000'] * 8
+
+      expect do |block|
+        board.for_all_rows_columns_diagonals(&block)
+      end.to yield_successive_args(*expected_args)
+    end
+
+    it 'yield with each row, column, diagonal of the board' do
+      board = Board.new('012210102')
+      expected_args = [
+        '012', '210', '102', # each row
+        '021', '110', '202', # each column
+        '012', '211' # two diagonals
+      ]
+
+      expect do |block|
+        board.for_all_rows_columns_diagonals(&block)
+      end.to yield_successive_args(*expected_args)
     end
   end
 

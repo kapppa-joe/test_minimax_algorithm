@@ -77,6 +77,12 @@ class Board
     end
   end
 
+  def for_all_rows_columns_diagonals
+    3.times { |i| yield row(i) }
+    3.times { |i| yield column(i) }
+    2.times { |i| yield diagonal(i) }
+  end
+
   def self.score_board(board, player)
     if player == board[0].to_i
       1
