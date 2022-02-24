@@ -29,7 +29,7 @@ describe Board do
     end
   end
 
-  describe '::to_s' do
+  describe '#to_s' do
     it 'return a string' do
       board = Board.new
       expect(board.to_s).to be_a(String)
@@ -44,7 +44,7 @@ describe Board do
     end
   end
 
-  describe 'display_grid' do
+  describe '#display_grid' do
     it 'return a string of the board as a pretty looking grid' do
       board = Board.new
       expected_output =
@@ -58,7 +58,7 @@ describe Board do
     end
   end
 
-  describe 'copy' do
+  describe '#copy' do
     it 'returns a board' do
       board_copy = Board.new.copy
       expect(board_copy).to be_a(Board)
