@@ -59,6 +59,23 @@ class Board
     @board[start_index, 3]
   end
 
+  def column(column_number)
+    raise InvalidInputError unless (0..2).cover?(column_number)
+
+    start_index = column_number
+    @board[start_index] + @board[start_index + 3] + @board[start_index + 6]
+  end
+
+  def diagonal(num)
+    # 0 for left-to-right, 1 for right-to-left
+    raise InvalidInputError unless (0..1).cover?(num)
+
+    if num.zero?
+      @board[0] + @board[4] + @board[8]
+    else
+      @board[2] + @board[4] + @board[6]
+    end
+  end
 
   def self.score_board(board, player)
     if player == board[0].to_i

@@ -129,7 +129,7 @@ describe Board do
     end
   end
 
-  describe 'row' do
+  describe '#row' do
     it 'take an integer and return a string' do
       expect(board.row(0)).to be_a(String)
     end
@@ -154,10 +154,77 @@ describe Board do
     end
 
     describe 'raise InvalidInputError when given an input not in range 0..2' do
-      test_cases = [-1, 3, 4, nil, '0', '1', '2', 12, 'a', [0], [1]]
+      test_cases = [-1, 3, 4, nil, true, false, '0', '1', '2', 12, 'a', [0], [1]]
       test_cases.each do |input|
-        it ", input: #{input}" do
+        it "input: #{input.inspect}" do
           expect { board.row(input) }.to raise_error(InvalidInputError)
+        end
+      end
+    end
+  end
+
+  describe '#column' do
+    it 'take an integer and return a string' do
+      expect(board.column(0)).to be_a(String)
+    end
+
+    it 'return "000" when the board is empty and given number 0' do
+      expect(board.column(0)).to eql '000'
+    end
+
+    it 'return a string representation of the first column in the board when given number 0' do
+      board = Board.new('111222000')
+      expect(board.column(0)).to eql '120'
+
+      board2 = Board.new('120002001')
+      expect(board2.column(0)).to eql '100'
+    end
+
+    it 'return a string representation of the nth column in the board when given number n' do
+      board = Board.new('111202011')
+      expect(board.column(0)).to eql '120'
+      expect(board.column(1)).to eql '101'
+      expect(board.column(2)).to eql '121'
+    end
+
+    describe 'raise InvalidInputError when given an input not in range 0..2' do
+      test_cases = [-1, 3, 4, nil, true, false, '0', '1', '2', 12, 'a', [0], [1]]
+      test_cases.each do |input|
+        it "input: #{input.inspect}" do
+          expect { board.column(input) }.to raise_error(InvalidInputError)
+        end
+      end
+    end
+  end
+
+  describe '#diagonal' do
+    it 'take an integer and return a string' do
+      expect(board.diagonal(0)).to be_a(String)
+    end
+
+    it 'return "000" when the board is empty and given number 0' do
+      expect(board.diagonal(0)).to eql '000'
+    end
+
+    it 'return a string representation of the left-to-right diagonal in the board when given number 0' do
+      board = Board.new('111222000')
+      expect(board.diagonal(0)).to eql '120'
+
+      board2 = Board.new('120002001')
+      expect(board2.diagonal(0)).to eql '101'
+    end
+
+    it 'return a string representation of the nth diagonal in the board when given number n' do
+      board = Board.new('120120120')
+      expect(board.diagonal(0)).to eql '120'
+      expect(board.diagonal(1)).to eql '021'
+    end
+
+    describe 'raise InvalidInputError when given an input not in range 0..1' do
+      test_cases = [-1, 2, 3, 4, true, false, nil, '0', '1', '2', 12, 'a', [0], [1]]
+      test_cases.each do |input|
+        it "input: #{input.inspect}" do
+          expect { board.diagonal(input) }.to raise_error(InvalidInputError)
         end
       end
     end
