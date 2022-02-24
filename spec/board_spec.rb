@@ -39,10 +39,20 @@ describe Board do
 
     it 'returns a copy of the same board, with a different object id' do
       board = Board.new('120120120')
-      board_copy = board.copy
+      copied_board = board.copy
 
-      expect(board_copy.to_s).to eql '120120120'
-      expect(board.object_id).not_to eql board_copy.object_id
+      expect(copied_board.to_s).to eql '120120120'
+      expect(board.object_id).not_to eql copied_board.object_id
+    end
+
+    it 'do not share change between original board and copied board' do
+      board = Board.new('120120120')
+      copied_board = board.copy
+
+      board = board.play_move(2, 2)
+      copied_board = copied_board.play_move(2, 8)
+
+      expect(board.to_s).not_to eql copied_board.to_s
     end
   end
 
