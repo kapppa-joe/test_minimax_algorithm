@@ -525,8 +525,43 @@ describe Board do
     end
 
     context '[in middle of a game]' do
-      context 'only one blank cell' do
-        it 'to add new test from here'
+      context 'with only one empty cell,' do
+        it 'return +1 if player will win after playing at empty cell' do
+          board = Board.new('121212210')
+          player = 1
+
+          expect(board.evaluate_score(player)).to eql 1
+        end
+
+        it 'return 0 if it will be a draw game after playing at empty cell' do
+          board = Board.new('121212210')
+          player = 2
+
+          expect(board.evaluate_score(player)).to eql 0
+        end
+      end
+
+      context 'with two empty cells,' do
+        it 'return +1 if player can win by playing at one of the cells' do
+          board = Board.new('122211010')
+          player = 1
+
+          expect(board.evaluate_score(player)).to eql 1
+        end
+
+        it 'return -1 if player will always lose by playing at one any of the cells' do
+          board = Board.new('121112020')
+          player = 2
+
+          expect(board.evaluate_score(player)).to eql(-1)
+        end
+
+        it 'return 0 if two available moves scores -1 and 0' do
+          board = Board.new('121221010')
+          player = 2
+
+          expect(board.evaluate_score(player)).to eql(0)
+        end
       end
     end
   end
