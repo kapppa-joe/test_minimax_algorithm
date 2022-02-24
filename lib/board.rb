@@ -35,6 +35,14 @@ class Board
     @board
   end
 
+  def opponent_of(player)
+    case player
+    when 1 then 2
+    when 2 then 1
+    else raise InvalidInputError
+    end
+  end
+
   def play_move(player, cell_index)
     raise InvalidInputError if player != 1 && player != 2
     raise InvalidInputError unless (0..8).cover?(cell_index)
@@ -108,11 +116,16 @@ class Board
   end
 
   def evaluate_score(player)
-    if player == @board[0].to_i
-      1
-    else
-      -1
+    case find_winner
+    when player then return 1
+    when opponent_of(player) then return -1
     end
+
+    # when no one has won yet
+    return 0 if self.full?
+
+    # start recursion
+
   end
 
   # =================================================

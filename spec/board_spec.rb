@@ -139,6 +139,23 @@ describe Board do
     end
   end
 
+  describe '#opponent_of' do
+    it 'return 2 when input is 1' do
+      expect(board.opponent_of(1)).to eql 2
+    end
+
+    it 'return 1 when input is 2' do
+      expect(board.opponent_of(2)).to eql 1
+    end
+
+    it 'raise InvalidInputError if input is not 1 or 2' do
+      test_cases = [-1, 3, 4, nil, true, false, '0', '1', '2', 12, 'a', [0], [1]]
+      test_cases.each do |invalid_input|
+        expect { board.opponent_of(invalid_input) }.to raise_error(InvalidInputError)
+      end
+    end
+  end
+
   describe '#empty?' do
     it 'return true for a new board' do
       expect(board.empty?).to be true
@@ -172,14 +189,14 @@ describe Board do
     end
 
     it 'return false if any cell of the board is "0"' do
-      test_cases = [
-        '110222111',
-        '121012121',
-        '210101212',
-        '111222101',
-        '111220111',
-        '111222110',
-        '111202011'
+      test_cases = %w[
+        110222111
+        121012121
+        210101212
+        111222101
+        111220111
+        111222110
+        111202011
       ]
       test_cases.each do |input_string|
         board = Board.new(input_string)
@@ -333,7 +350,7 @@ describe Board do
                    .repeated_permutation(3)
                    .to_a
                    .map(&:join)
-      test_cases -= ['111', '222']
+      test_cases -= %w[111 222]
 
       test_cases.each do |three_cells|
         expect(board.check_three_in_a_row(three_cells)).to eql nil
@@ -414,37 +431,104 @@ describe Board do
   # === minimax logic, to be extracted out later ===
   # ================================================
 
-  describe 'evaluate_score' do
+  describe '#evaluate_score' do
     it 'returns an integer' do
       board = Board.new('111000000')
       output = board.evaluate_score(1)
       expect(output).to be_an(Integer)
     end
 
-    it 'returns +1 when given board = "111000000" and player = 1' do
-      board = Board.new('111000000')
-      player = 1
-      output = board.evaluate_score(player)
-      expect(output).to eql 1
+    context '[someone has won]' do
+      it 'returns +1 when given board = "111000000" and player == 1' do
+        board = Board.new('111000000')
+        player = 1
+        expected_output = 1
+
+        output = board.evaluate_score(player)
+        expect(output).to eql expected_output
+      end
+
+      it 'returns -1 when given board = "111000000" and player == 2' do
+        board = Board.new('111000000')
+        player = 2
+        expected_output = -1
+
+        output = board.evaluate_score(player)
+        expect(output).to eql(expected_output)
+      end
+
+      it 'returns +1 when given board = "222000000" and player == 2' do
+        board = Board.new('222000000')
+        player = 2
+        expected_output = 1
+
+        output = board.evaluate_score(player)
+        expect(output).to eql(expected_output)
+      end
+
+      it 'return 1 when given board = "111212221" and player == 1' do
+        board = Board.new('111212221')
+        player = 1
+        output = board.evaluate_score(player)
+        expect(output).to eql(1)
+      end
+
+      describe 'return +1 when the return value of #find_winner match player number' do
+        board = Board.new
+
+        [1, 2].each do |player|
+          it "for player = #{player}" do
+            allow(board).to receive(:find_winner).and_return(player)
+
+            output = board.evaluate_score(player)
+            expect(output).to eql(1)
+          end
+        end
+      end
+
+      describe 'return -1 when the return value of #find_winner is the opponent player' do
+        board = Board.new
+
+        [1, 2].each do |player|
+          it "for player = #{player}" do
+            opponent_player = player == 1 ? 2 : 1
+            allow(board).to receive(:find_winner).and_return(opponent_player)
+
+            output = board.evaluate_score(player)
+            expect(output).to eql(-1)
+          end
+        end
+      end
     end
 
-    it 'returns -1 when given board = "111000000" and player = 2' do
-      board = Board.new('111000000')
-      player = 2
-      output = board.evaluate_score(player)
-      expect(output).to eql(-1)
+    context '[draw game]' do
+      describe 'return 0 when given board = "121212212"' do
+        board = Board.new('121212212')
+        expected_output = 0
+
+        [1, 2].each do |player|
+          it "for player = #{player}" do
+            expect(board.evaluate_score(player)).to eql expected_output
+          end
+        end
+      end
+
+      describe 'return 0 when the board is full and #find_winner returns nil' do
+        [1, 2].each do |player|
+          it ", for player = #{player}" do
+            allow(board).to receive(:full?).and_return(true)
+            allow(board).to receive(:find_winner).and_return(nil)
+            expect(board.evaluate_score(player)).to eql 0
+          end
+        end
+      end
     end
 
-    it 'returns +1 when given board = "222000000" and player = 2' do
-      board = Board.new('222000000')
-      player = 2
-      output = board.evaluate_score(player)
-      expect(output).to eql(1)
+    context '[in middle of a game]' do
+      context 'only one blank cell' do
+        it 'to add new test from here'
+      end
     end
-
-    # it 'return +1 when the return value of Board#winner match player number' do
-    #   output = desc
-    # end
   end
 
   # =================================================
