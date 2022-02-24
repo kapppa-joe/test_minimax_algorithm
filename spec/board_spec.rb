@@ -282,6 +282,75 @@ describe Board do
     end
   end
 
+  describe '#find_winner' do
+    it 'return nil when board is empty' do
+      expect(board.find_winner).to be_nil
+    end
+
+    it 'return 1 when first row is "111"' do
+      board = Board.new('111000000')
+      expect(board.find_winner).to eql 1
+    end
+
+    it 'return 2 when first row is "222"' do
+      board = Board.new('222000000')
+      expect(board.find_winner).to eql 2
+    end
+
+    it 'return 1 when the board is "111222000"' do
+      # for performance reason, deliberately not to check for invalid boards here
+      board = Board.new('111222000')
+      expect(board.find_winner).to eql 1
+    end
+
+    describe "return the winner's player number if the game has been won" do
+      test_cases = {
+        '111220000' => 1,
+        '222111000' => 2,
+        '000111222' => 1,
+        '000222111' => 2,
+        '120120120' => 1,
+        '021021021' => 2,
+        '122112201' => 1,
+        '112021221' => 2,
+        '110110112' => 1,
+        '112022211' => 2,
+        '122022200' => 2,
+        '201212211' => 2,
+        '221001201' => 1
+      }
+      test_cases.each do |input_string, expected_output|
+        it "board: #{input_string}, winner: #{expected_output}" do
+          board = Board.new(input_string)
+          expect(board.find_winner).to eql expected_output
+        end
+      end
+    end
+
+    describe 'return nil when no one has won on the board' do
+      test_cases = %w[
+        021012021
+        001120100
+        121122202
+        210221010
+        210120201
+        100122221
+        012200112
+        020101121
+        002010010
+        012101221
+        010221202
+        101100001
+      ]
+      test_cases.each do |input_string|
+        it "board: #{input_string}" do
+          board = Board.new(input_string)
+          expect(board.find_winner).to be_nil
+        end
+      end
+    end
+  end
+
   # ================================================
   # === minimax logic, to be extracted out later ===
   # ================================================
@@ -357,12 +426,12 @@ describe Board do
           ' -------'
       }
 
-      test_cases.each do |input_string, expected_outout|
+      test_cases.each do |input_string, expected_output|
         it "display the board in a grid which represent 0 1 2 with symbol . X O correspondingly, input string: #{input_string}" do
           board = Board.new(input_string)
           actual_output = board.display_grid
 
-          expect(actual_output).to eql expected_outout
+          expect(actual_output).to eql expected_output
         end
       end
     end

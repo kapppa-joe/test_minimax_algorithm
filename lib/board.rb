@@ -90,8 +90,14 @@ class Board
     end
   end
 
-  # def find_winner
-  # end
+  def find_winner
+    for_all_rows_columns_diagonals do |three_cells|
+      winner = check_three_in_a_row(three_cells)
+      return winner if winner
+    end
+
+    nil
+  end
 
   def self.score_board(board, player)
     if player == board[0].to_i
