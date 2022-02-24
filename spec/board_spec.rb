@@ -70,7 +70,7 @@ describe Board do
     end
   end
 
-  describe 'play_move' do
+  describe '#play_move' do
     it 'return a board' do
       output = board.play_move(1, 2)
 
@@ -136,6 +136,55 @@ describe Board do
     it 'raises OccupiedCellError if the cell at cell_index was already taken' do
       board = Board.new('100000000')
       expect { board.play_move(2, 0) }.to raise_error(OccupiedCellError, 'cell 0 was already taken')
+    end
+  end
+
+  describe '#empty?' do
+    it 'return true for a new board' do
+      expect(board.empty?).to be true
+    end
+
+    it 'return false if the board is not all zeros' do
+      expect(Board.new('100000000').empty?).to be false
+      expect(Board.new('020000000').empty?).to be false
+      expect(Board.new('120010020').empty?).to be false
+    end
+  end
+
+  describe '#full?' do
+    it 'return false for an empty board' do
+      expect(board.full?).to be false
+    end
+
+    it 'return true for a board with nine 1s' do
+      board = Board.new('111111111')
+      expect(board.full?).to be true
+    end
+
+    it 'return true for a board with nine 2s' do
+      board = Board.new('222222222')
+      expect(board.full?).to be true
+    end
+
+    it 'return false if 2nd cell of the board is "0"' do
+      board = Board.new('101111111')
+      expect(board.full?).to be false
+    end
+
+    it 'return false if any cell of the board is "0"' do
+      test_cases = [
+        '110222111',
+        '121012121',
+        '210101212',
+        '111222101',
+        '111220111',
+        '111222110',
+        '111202011'
+      ]
+      test_cases.each do |input_string|
+        board = Board.new(input_string)
+        expect(board.full?).to be false
+      end
     end
   end
 

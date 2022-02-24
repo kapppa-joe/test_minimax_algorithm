@@ -52,6 +52,14 @@ class Board
   # === game logic, to be extracted out later ===
   # =============================================
 
+  def empty?
+    @board == '000000000'
+  end
+
+  def full?
+    !@board.include?('0')
+  end
+
   def row(row_number)
     raise InvalidInputError unless (0..2).cover?(row_number)
 
