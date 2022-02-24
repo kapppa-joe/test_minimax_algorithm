@@ -214,7 +214,8 @@ describe Board do
       expect(board2.diagonal(0)).to eql '101'
     end
 
-    it 'return a string representation of diagonal in the board when given number 0 (for left-to-right) or 1 (for right-to-left)' do
+    it 'return a string representation of diagonal in the board
+      when given number 0 (for left-to-right) or 1 (for right-to-left)' do
       board = Board.new('120120120')
       expect(board.diagonal(0)).to eql '120'
       expect(board.diagonal(1)).to eql '021'
@@ -259,6 +260,28 @@ describe Board do
     end
   end
 
+  describe '#check_three_in_a_row' do
+    it 'return integer 1 when given string "111"' do
+      expect(board.check_three_in_a_row('111')).to eql 1
+    end
+
+    it 'return integer 2 when given string "222"' do
+      expect(board.check_three_in_a_row('222')).to eql 2
+    end
+
+    it 'return nil for all other cases' do
+      test_cases = [0, 1, 2]
+                   .repeated_permutation(3)
+                   .to_a
+                   .map(&:join)
+      test_cases -= ['111', '222']
+
+      test_cases.each do |three_cells|
+        expect(board.check_three_in_a_row(three_cells)).to eql nil
+      end
+    end
+  end
+
   # ================================================
   # === minimax logic, to be extracted out later ===
   # ================================================
@@ -288,7 +311,6 @@ describe Board do
   # =================================================
   # === CLI view logic, to be extracted out later ===
   # =================================================
-
 
   describe 'CLI view' do
     describe '#display_grid' do

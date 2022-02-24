@@ -83,6 +83,16 @@ class Board
     2.times { |i| yield diagonal(i) }
   end
 
+  def check_three_in_a_row(three_cells)
+    case three_cells
+    when '111' then 1
+    when '222' then 2
+    end
+  end
+
+  # def find_winner
+  # end
+
   def self.score_board(board, player)
     if player == board[0].to_i
       1
