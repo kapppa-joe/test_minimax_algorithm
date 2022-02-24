@@ -205,6 +205,49 @@ describe Board do
     end
   end
 
+  describe '#empty_cells' do
+    it 'return an array' do
+      expect(board.empty_cells).to be_an(Array)
+    end
+
+    it 'return an empty array when board is fully occupied' do
+      board = Board.new('121212121')
+      expect(board.empty_cells).to eql []
+    end
+
+    it 'return [0] when only the first cell of board is empty' do
+      board = Board.new('012121212')
+      expect(board.empty_cells).to eql [0]
+    end
+
+    it 'return [0, 1, 2, ... 8] for an empty board' do
+      expect(board.empty_cells).to eql (0..8).to_a
+    end
+
+    it 'return [i] when only the ith cell of board is empty' do
+      9.times do |i|
+        string = '121212121'
+        string[i] = '0'
+        board = Board.new(string)
+        expect(board.empty_cells).to eql [i]
+      end
+    end
+
+    it 'return an array of all indices of zeros in the board' do
+      test_cases = {
+        '101020201' => [1, 3, 5, 7],
+        '012022011' => [0, 3, 6],
+        '000111222' => [0, 1, 2],
+        '010200201' => [0, 2, 4, 5, 7]
+      }
+
+      test_cases.each do |input_string, expected_output|
+        board = Board.new(input_string)
+        expect(board.empty_cells).to eql expected_output
+      end
+    end
+  end
+
   describe '#row' do
     it 'take an integer and return a string' do
       expect(board.row(0)).to be_a(String)

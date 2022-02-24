@@ -68,6 +68,10 @@ class Board
     !@board.include?('0')
   end
 
+  def empty_cells
+    (0..8).filter { |index| @board[index] == '0' }
+  end
+
   def row(row_number)
     raise InvalidInputError unless (0..2).cover?(row_number)
 
@@ -125,9 +129,8 @@ class Board
     return 0 if self.full?
 
     # start recursion
-    empty_cells = (0..8).filter { |index| @board[index] == '0' }
     possible_scores =
-      empty_cells.map do |cell_index|
+      self.empty_cells.map do |cell_index|
         new_board = play_move(player, cell_index)
         new_board.evaluate_score(opponent_of(player)) * -1
       end
