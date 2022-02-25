@@ -19,6 +19,15 @@ module CleverAIStrategy
     all_possible_scores.max
   end
 
+  def analyse_each_move(player)
+    empty_cells.map do |cell_index|
+      new_board = play_move(player, cell_index)
+      score = new_board.evaluate_score(opponent_of(player)) * -1
+      yield cell_index, score if block_given?
+      [cell_index, score]
+    end.to_h
+  end
+
   def suggest_next_move(player)
     available_moves = self.empty_cells
 
@@ -28,17 +37,12 @@ module CleverAIStrategy
     when 9 then 0
     end
 
-    best_move = available_moves[0]
-    best_score = -1
-
-    available_moves.each do |cell_index|
-      new_board = play_move(player, cell_index)
-      score = new_board.evaluate_score(opponent_of(player)) * -1
-      if score > best_score
-        best_move = cell_index
-        best_score = score
-      end
+    # when having 2 ~ 8 empty cells, find the move with best score
+    moves_and_scores = analyse_each_move(player) do |move, score|
+      return move if score == 1
     end
+
+    best_move, _best_score = moves_and_scores.max_by { |_move, score| score }
     best_move
   end
 end

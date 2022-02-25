@@ -190,6 +190,81 @@ describe CleverAI do
     end
   end
 
+  describe '#analyse_each_move' do
+    context 'when board is full' do
+      it 'return an empty hash' do
+        board = described_class.new('121212211')
+        output = board.analyse_each_move(1)
+
+        expect(output).to eql({})
+      end
+    end
+
+    context 'when board has only 1 empty cell' do
+      test_cases = [
+        ['021121212', { 0 => 0 }],
+        ['120211212', { 2 => 0 }],
+        ['121212210', { 8 => 1 }],
+        ['121211022', { 6 => 1 }]
+      ]
+      test_cases.each do |input_string, expected_output|
+        it "return a hash with a cell index and a score of that move, board = #{input_string}" do
+          board = described_class.new(input_string)
+          player = 1
+          actual_output = board.analyse_each_move(player)
+
+          expect(actual_output).to eql expected_output
+        end
+      end
+    end
+
+    context 'when board has 2 or more empty cell' do
+      test_cases = [
+        ['012022011', { 0 => -1, 3 => -1, 6 => 1 }],
+        ['021100221', { 0 => -1, 4 => 1, 5 => 1 }],
+        ['210001212', { 2 => -1, 3 => -1, 4 => 1 }],
+        ['010200201', { 0 => 1, 2 => -1, 4 => -1, 5 => -1, 7 => -1 }],
+        ['122000001', { 3 => 1, 4 => 1, 5 => -1, 6 => 1, 7 => 1 }]
+      ]
+      test_cases.each do |input_string, expected_output|
+        it "return a hash with index of each empty cell and the score of that move, board = #{input_string}" do
+          board = described_class.new(input_string)
+          player = 1
+          actual_output = board.analyse_each_move(player)
+
+          expect(actual_output).to eql expected_output
+        end
+      end
+    end
+
+    context 'when a block is given to this method' do
+      describe 'yields once for each empty cell in the board' do
+        test_cases = {
+          '121212121' => 0,
+          '101212121' => 1,
+          '121012021' => 2,
+          '122000001' => 5
+        }
+        test_cases.each do |input_string, n|
+          it "for #{n} empty cell(s)" do
+            expect do |block|
+              described_class.new(input_string).analyse_each_move(1, &block)
+            end.to yield_control.exactly(n).times
+          end
+        end
+      end
+
+      it 'yields with argument of each cell index and its score' do
+        input_string = '122000001'
+        board = described_class.new(input_string)
+        expected_args = { 3 => 1, 4 => 1, 5 => -1, 6 => 1, 7 => 1 }.to_a
+        expect do |block|
+          board.analyse_each_move(1, &block)
+        end.to yield_successive_args(*expected_args)
+      end
+    end
+  end
+
   describe '#suggest_next_move' do
     context 'edge cases' do
       it 'returns nil if no empty cell on the board' do
@@ -234,8 +309,6 @@ describe CleverAI do
           expect(actual_output).to eql expected_output
         end
       end
-
-      it "trys to block the cell that opponent can play to win next round"
 
       test_cases_with_a_non_obvious_best_move = {
         '121200000' => 4,
