@@ -1,3 +1,3 @@
-# (WIP) Tictactoe minimax algorithm
-Try to write a minimax algorithm for TicTacToe in ruby. (Work in progress)
+# (WIP) Tictactoe min-max algorithm
 
+My attempt in writing a min-max algorithm for TicTacToe in ruby.
