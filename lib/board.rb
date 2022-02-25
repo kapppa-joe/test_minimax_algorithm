@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 
-class InvalidInputError < StandardError
-  MESSAGE = 'Cannot process that input value'
-  def initialize(msg = MESSAGE)
-    super
-  end
-end
-class OccupiedCellError < InvalidInputError
-  MESSAGE = 'Sorry, the cell was already taken'
-  def initialize(msg = MESSAGE)
-    super
-  end
-end
-
+require 'custom_exceptions'
 class Board
   def initialize(input_string = '000000000')
     if input_string.size != 9 || contain_invalid_char(input_string)
