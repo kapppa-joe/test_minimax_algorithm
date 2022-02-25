@@ -16,7 +16,7 @@ class Board
   end
 
   def copy
-    Board.new(@board)
+    self.class.new(@board)
   end
 
   def to_s
@@ -41,7 +41,7 @@ class Board
 
     new_board_string = @board[0, 9]
     new_board_string[cell_index] = player.to_s
-    Board.new(new_board_string.freeze)
+    self.class.new(new_board_string.freeze)
   end
 
   # =============================================
@@ -107,30 +107,30 @@ class Board
     nil
   end
 
-  def evaluate_score(player)
-    case find_winner
-    when player then return 1
-    when opponent_of(player) then return -1
-    end
+  # def evaluate_score(player)
+  #   case find_winner
+  #   when player then return 1
+  #   when opponent_of(player) then return -1
+  #   end
 
-    # no winner so far
-    return 0 if self.full? # no winner + board is full = draw game
+  #   # no winner so far
+  #   return 0 if self.full? # no winner + board is full = draw game
 
-    # start recursion
-    all_possible_scores =
-      empty_cells.map do |cell_index|
-        new_board = play_move(player, cell_index)
-        new_board.evaluate_score(opponent_of(player)) * -1
-      end
-    all_possible_scores.max
-  end
+  #   # start recursion
+  #   all_possible_scores =
+  #     empty_cells.map do |cell_index|
+  #       new_board = play_move(player, cell_index)
+  #       new_board.evaluate_score(opponent_of(player)) * -1
+  #     end
+  #   all_possible_scores.max
+  # end
 
-  def suggest_best_move(player)
-    available_moves = self.empty_cells
-    case available_moves.length
-    when 0 then nil
-    when 1 then available_moves[0]
-    when 9 then 0
-    end
-  end
+  # def suggest_best_move(player)
+  #   available_moves = self.empty_cells
+  #   case available_moves.length
+  #   when 0 then nil
+  #   when 1 then available_moves[0]
+  #   when 9 then 0
+  #   end
+  # end
 end
