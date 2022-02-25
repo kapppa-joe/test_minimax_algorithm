@@ -660,6 +660,18 @@ describe Board do
     end
   end
 
+  describe '#suggest_best_move' do
+    context 'edge cases' do
+      it 'returns nil if no empty cell on the board'
+      it 'returns the only one available cell if there is only one empty cell on the board'
+      it 'returns the 0th cell if board is empty'
+    end
+
+    context 'two or more possible moves' do
+      it 'suggests a move which leads to best score'
+      it 'returns early if found a move of score 1'
+    end
+  end
   # =================================================
   # === CLI view logic, to be extracted out later ===
   # =================================================
