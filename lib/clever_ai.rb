@@ -32,9 +32,9 @@ module CleverAIStrategy
     available_moves = self.empty_cells
 
     case available_moves.length
-    when 0 then nil
-    when 1 then available_moves[0]
-    when 9 then 0
+    when 0 then return nil
+    when 1 then return available_moves[0]
+    when 9 then return 0
     end
 
     # when having 2 ~ 8 empty cells, find the move with best score
