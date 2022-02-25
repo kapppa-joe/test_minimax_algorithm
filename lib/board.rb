@@ -137,6 +137,15 @@ class Board
     all_possible_scores.max
   end
 
+  def suggest_best_move(player)
+    available_moves = self.empty_cells
+    case available_moves.length
+    when 0 then nil
+    when 1 then available_moves[0]
+    when 9 then 0
+    end
+  end
+
   # =================================================
   # === CLI view logic, to be extracted out later ===
   # =================================================

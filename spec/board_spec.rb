@@ -662,15 +662,39 @@ describe Board do
 
   describe '#suggest_best_move' do
     context 'edge cases' do
-      it 'returns nil if no empty cell on the board'
-      it 'returns the only one available cell if there is only one empty cell on the board'
-      it 'returns the 0th cell if board is empty'
+      it 'returns nil if no empty cell on the board' do
+        board = Board.new('121212121')
+        [1, 2].each do |player|
+          expect(board.suggest_best_move(player)).to be_nil
+        end
+      end
+      it 'returns a number representing the only one available cell,
+        if there is only one empty cell on the board' do
+          test_cases = {
+            '021212121' => 0,
+            '120212121' => 2,
+            '121202121' => 4,
+            '121212101' => 7,
+            '121212110' => 8
+          }
+          test_cases.each do |input_string, expected_output|
+            board = Board.new(input_string)
+            [1, 2].each do |player|
+              expect(board.suggest_best_move(player)).to eql expected_output
+            end
+          end
+        end
+      it 'returns the 0th cell if board is empty' do
+        [1, 2].each do |player|
+          expect(board.suggest_best_move(player)).to eql 0
+        end
+      end
     end
 
-    context 'two or more possible moves' do
-      it 'suggests a move which leads to best score'
-      it 'returns early if found a move of score 1'
-    end
+    # context 'two or more possible moves' do
+    #   it 'suggests a move which leads to best score'
+    #   it 'returns early if found a move of score 1'
+    # end
   end
   # =================================================
   # === CLI view logic, to be extracted out later ===
