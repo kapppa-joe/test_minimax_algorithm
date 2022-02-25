@@ -49,4 +49,8 @@ end
 
 class CleverAI < Board
   include CleverAIStrategy
+
+  def self.suggest_next_move(board_string, player)
+    new(board_string).suggest_next_move(player)
+  end
 end

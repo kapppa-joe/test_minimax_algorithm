@@ -333,4 +333,16 @@ describe CleverAI do
       end
     end
   end
+
+  describe '::suggest_next_move' do
+    it 'give the same result as the instance method of the same name' do
+      10.times do
+        input_string = rand(3 ** 9).to_s(3).rjust(9, '0')
+        player_number = rand(1..2)
+        expected_output = described_class.new(input_string).suggest_next_move(player_number)
+        actual_output = described_class.suggest_next_move(input_string, player_number)
+        expect(actual_output).to eql expected_output
+      end
+    end
+  end
 end
