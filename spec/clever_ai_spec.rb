@@ -190,12 +190,12 @@ describe CleverAI do
     end
   end
 
-  describe '#suggest_best_move' do
+  describe '#suggest_next_move' do
     context 'edge cases' do
       it 'returns nil if no empty cell on the board' do
         board = described_class.new('121212121')
         [1, 2].each do |player|
-          expect(board.suggest_best_move(player)).to be_nil
+          expect(board.suggest_next_move(player)).to be_nil
         end
       end
 
@@ -211,7 +211,7 @@ describe CleverAI do
         test_cases.each do |input_string, expected_output|
           board = described_class.new(input_string)
           [1, 2].each do |player|
-            expect(board.suggest_best_move(player)).to eql expected_output
+            expect(board.suggest_next_move(player)).to eql expected_output
           end
         end
       end
@@ -230,7 +230,7 @@ describe CleverAI do
       test_cases_with_quick_wins.each do |input_string, expected_output|
         it "can spot a move which immediately leads to winning, board = #{input_string}" do
           clever_ai = described_class.new(input_string)
-          actual_output = clever_ai.suggest_best_move(1)
+          actual_output = clever_ai.suggest_next_move(1)
           expect(actual_output).to eql expected_output
         end
       end
@@ -247,7 +247,7 @@ describe CleverAI do
       test_cases_with_a_non_obvious_best_move.each do |input_string, expected_output|
         it "can spot a best move that eventually leads to winning, board = #{input_string}" do
           clever_ai = described_class.new(input_string)
-          actual_output = clever_ai.suggest_best_move(1)
+          actual_output = clever_ai.suggest_next_move(1)
           expect(actual_output).to eql expected_output
         end
       end
@@ -256,7 +256,7 @@ describe CleverAI do
     it 'returns the 0th cell if board is empty', :slow do
       [1, 2].each do |player|
         clever_ai = described_class.new
-        expect(clever_ai.suggest_best_move(player)).to eql 0
+        expect(clever_ai.suggest_next_move(player)).to eql 0
       end
     end
   end

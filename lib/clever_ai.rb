@@ -19,7 +19,7 @@ module CleverAIStrategy
     all_possible_scores.max
   end
 
-  def suggest_best_move(player)
+  def suggest_next_move(player)
     available_moves = self.empty_cells
 
     case available_moves.length
