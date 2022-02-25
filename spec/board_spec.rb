@@ -350,10 +350,10 @@ describe Board do
     end
   end
 
-  describe '#for_all_rows_columns_diagonals' do
+  describe '#for_each_rows_columns_diagonals' do
     it 'yield 8 times' do
       expect do |block|
-        board.for_all_rows_columns_diagonals(&block)
+        board.for_each_rows_columns_diagonals(&block)
       end.to yield_control.exactly(8).times
     end
 
@@ -361,7 +361,7 @@ describe Board do
       expected_args = ['000'] * 8
 
       expect do |block|
-        board.for_all_rows_columns_diagonals(&block)
+        board.for_each_rows_columns_diagonals(&block)
       end.to yield_successive_args(*expected_args)
     end
 
@@ -374,7 +374,7 @@ describe Board do
       ]
 
       expect do |block|
-        board.for_all_rows_columns_diagonals(&block)
+        board.for_each_rows_columns_diagonals(&block)
       end.to yield_successive_args(*expected_args)
     end
   end

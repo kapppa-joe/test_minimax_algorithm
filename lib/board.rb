@@ -97,7 +97,7 @@ class Board
     end
   end
 
-  def for_all_rows_columns_diagonals
+  def for_each_rows_columns_diagonals
     3.times { |i| yield row(i) }
     3.times { |i| yield column(i) }
     2.times { |i| yield diagonal(i) }
@@ -111,7 +111,7 @@ class Board
   end
 
   def find_winner
-    for_all_rows_columns_diagonals do |three_cells|
+    for_each_rows_columns_diagonals do |three_cells|
       winner = check_three_in_a_row(three_cells)
       return winner if winner
     end
