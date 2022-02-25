@@ -104,7 +104,7 @@ describe Board do
         '1', '2', 0, nil, 3, 4, '12', '01', '11', '22', 'abc', [1], [2]
       ]
       invalid_inputs.each do |input|
-        it ", first input = #{input.inspect}" do
+        it "first input = #{input.inspect}" do
           expect { board.play_move(input, 0) }.to raise_error(InvalidInputError)
         end
       end
@@ -558,7 +558,7 @@ describe Board do
 
       describe 'return 0 when the board is full and #find_winner returns nil' do
         [1, 2].each do |player|
-          it ", for player = #{player}" do
+          it "for player = #{player}" do
             allow(board).to receive(:full?).and_return(true)
             allow(board).to receive(:find_winner).and_return(nil)
             expect(board.evaluate_score(player)).to eql 0
@@ -639,7 +639,7 @@ describe Board do
             '210120201' => 0,
             '010221102' => 0,
             '001020020' => 0,
-            '020102211' => 0,
+            '020102211' => 0
           }
           test_cases.each do |input_string, expected_output|
             it "board: #{input_string}" do
@@ -650,13 +650,13 @@ describe Board do
             end
           end
         end
-
-        # === below test passed but temporarily comment out due to taking too nuch time ===
-        it 'should score empty board as 0' do
-          player = 1
-          expect(board.evaluate_score(player)).to eql 0
-        end
       end
+    end
+
+    # === skip the below test in guard spec due to taking too nuch time ===
+    it 'an empty board should score as 0', :slow do
+      player = 1
+      expect(board.evaluate_score(player)).to eql 0
     end
   end
 
