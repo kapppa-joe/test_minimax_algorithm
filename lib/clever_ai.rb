@@ -21,11 +21,25 @@ module CleverAIStrategy
 
   def suggest_best_move(player)
     available_moves = self.empty_cells
+
     case available_moves.length
     when 0 then nil
     when 1 then available_moves[0]
     when 9 then 0
     end
+
+    best_move = available_moves[0]
+    best_score = -1
+
+    available_moves.each do |cell_index|
+      new_board = play_move(player, cell_index)
+      score = new_board.evaluate_score(opponent_of(player)) * -1
+      if score > best_score
+        best_move = cell_index
+        best_score = score
+      end
+    end
+    best_move
   end
 end
 

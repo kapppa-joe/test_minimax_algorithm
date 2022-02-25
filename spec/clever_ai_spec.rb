@@ -218,11 +218,42 @@ describe CleverAI do
     end
 
     context 'two or more possible moves' do
-      it 'suggests a move which leads to best score'
-      it 'returns early if found a move of score 1'
+      test_cases_with_quick_wins = {
+        '012022011' => 6,
+        '012200112' => 4,
+        '012210102' => 7,
+        '021012021' => 0,
+        '121221010' => 8,
+        '201102120' => 4,
+        '210001212' => 4
+      }
+      test_cases_with_quick_wins.each do |input_string, expected_output|
+        it "can spot a move which immediately leads to winning, board = #{input_string}" do
+          clever_ai = described_class.new(input_string)
+          actual_output = clever_ai.suggest_best_move(1)
+          expect(actual_output).to eql expected_output
+        end
+      end
+
+      it "trys to block the cell that opponent can play to win next round"
+
+      test_cases_with_a_non_obvious_best_move = {
+        '121200000' => 4,
+        '120020010' => 6,
+        '200000000' => 4,
+        '000020000' => 0,
+        '020002100' => 0
+      }
+      test_cases_with_a_non_obvious_best_move.each do |input_string, expected_output|
+        it "can spot a best move that eventually leads to winning, board = #{input_string}" do
+          clever_ai = described_class.new(input_string)
+          actual_output = clever_ai.suggest_best_move(1)
+          expect(actual_output).to eql expected_output
+        end
+      end
     end
 
-    it 'returns the 0th cell if board is empty' do
+    it 'returns the 0th cell if board is empty', :slow do
       [1, 2].each do |player|
         clever_ai = described_class.new
         expect(clever_ai.suggest_best_move(player)).to eql 0
