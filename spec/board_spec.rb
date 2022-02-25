@@ -1,3 +1,4 @@
+require 'custom_exceptions'
 require 'board'
 
 describe Board do

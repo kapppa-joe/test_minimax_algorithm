@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'custom_exceptions'
 class Board
   def initialize(input_string = '000000000')
     if input_string.size != 9 || contain_invalid_char(input_string)
