@@ -568,7 +568,7 @@ describe Board do
     end
 
     context '[in middle of a game]' do
-      context 'with only one empty cell,' do
+      context 'with only 1 empty cell,' do
         it 'return +1 if player will win after playing at empty cell' do
           board = Board.new('121212210')
           player = 1
@@ -584,7 +584,7 @@ describe Board do
         end
       end
 
-      context 'with two empty cells,' do
+      context 'with 2 empty cells,' do
         it 'return +1 if player can win by playing at one of the cells' do
           board = Board.new('122211010')
           player = 1
@@ -597,6 +597,10 @@ describe Board do
           player = 2
 
           expect(board.evaluate_score(player)).to eql(-1)
+
+          board2 = Board.new('100122221')
+          player = 1
+          expect(board2.evaluate_score(player)).to eql(-1)
         end
 
         it 'return 0 if two available moves scores -1 and 0' do
@@ -604,6 +608,53 @@ describe Board do
           player = 2
 
           expect(board.evaluate_score(player)).to eql(0)
+        end
+      end
+
+      context 'with more than 2 empty cells' do
+        context 'when an instant win move is available' do
+          test_cases = %w[
+            201102120
+            100000221
+            021012021
+            001120100
+            012200112
+          ]
+          test_cases.each do |input_string|
+            it "board: #{input_string}" do
+              board = Board.new(input_string)
+              player = 1
+
+              expect(board.evaluate_score(player)).to eql 1
+            end
+          end
+        end
+
+        context 'more complex cases' do
+          test_cases = {
+            '201120120' => -1,
+            '121200000' => 1,
+            '002210200' => -1,
+            '210221010' => -1,
+            '210120201' => 0,
+            '010221102' => 0,
+            '001020020' => 0,
+            '020102211' => 0,
+          }
+          test_cases.each do |input_string, expected_output|
+            it "board: #{input_string}" do
+              board = Board.new(input_string)
+              player = 1
+
+              expect(board.evaluate_score(player)).to eql expected_output
+            end
+          end
+        end
+
+        # === below test passed but temporarily comment out due to taking too nuch time ===
+        it 'should score empty board as 0' do
+          player = 1
+          expect(board.evaluate_score(player)).to eql 0
         end
       end
     end
