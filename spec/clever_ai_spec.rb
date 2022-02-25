@@ -216,6 +216,12 @@ describe CleverAI do
         end
       end
     end
+
+    context 'two or more possible moves' do
+      it 'suggests a move which leads to best score'
+      it 'returns early if found a move of score 1'
+    end
+
     it 'returns the 0th cell if board is empty' do
       [1, 2].each do |player|
         clever_ai = described_class.new
