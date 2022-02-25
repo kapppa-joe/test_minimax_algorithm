@@ -145,29 +145,4 @@ class Board
     when 9 then 0
     end
   end
-
-  # =================================================
-  # === CLI view logic, to be extracted out later ===
-  # =================================================
-
-  def display_grid
-    lines = []
-    lines << horizontal_line
-    [0, 3, 6].each do |i|
-      row = @board[i, 3]
-      lines << display_row(row)
-    end
-    lines << horizontal_line
-
-    lines.join("\n")
-  end
-
-  def horizontal_line
-    ' -------'
-  end
-
-  def display_row(row)
-    a, b, c = row.tr('012', '.XO').chars
-    "| #{a} #{b} #{c} |"
-  end
 end
