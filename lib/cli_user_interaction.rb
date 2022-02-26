@@ -17,6 +17,6 @@ class CliUserInteraction
   end
 
   def print_board(input_string)
-    puts @presenter.display_grid(input_string)
+    puts @presenter.make_grid(input_string)
   end
 end

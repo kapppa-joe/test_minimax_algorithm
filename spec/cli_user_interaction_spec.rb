@@ -64,14 +64,14 @@ describe CliUserInteraction do
       @cli = described_class.new(presenter: @presenter)
     end
 
-    it 'calls the #display_grid method of presenter' do
-      expect(@presenter).to receive(:display_grid)
+    it 'calls the #make_grid method of presenter' do
+      expect(@presenter).to receive(:make_grid)
       @cli.print_board('000000000')
     end
 
-    it 'prints the output of #display_grid' do
+    it 'prints the output of #make_grid' do
       dummy_message = 'hello world'
-      allow(@presenter).to receive(:display_grid).and_return(dummy_message)
+      allow(@presenter).to receive(:make_grid).and_return(dummy_message)
 
       expected_msg = a_string_including(dummy_message)
       expect { @cli.print_board('') }.to output(expected_msg).to_stdout

@@ -2,10 +2,10 @@ require 'cli_view'
 
 describe CLIView do
   let(:cli_view) { described_class.new }
-  describe '#display_grid' do
+  describe '#make_grid' do
     it 'return a string of the cli_view as a pretty looking grid' do
       input_string = '000000000'
-      actual_output = cli_view.display_grid(input_string)
+      actual_output = cli_view.make_grid(input_string)
       expected_output =
         <<~GRID.chomp
            -------
@@ -20,7 +20,7 @@ describe CLIView do
 
     it 'display 1 as X in grid' do
       input_string = '111111111'
-      actual_output = cli_view.display_grid(input_string)
+      actual_output = cli_view.make_grid(input_string)
       expected_output =
         <<~GRID.chomp
            -------
@@ -52,7 +52,7 @@ describe CLIView do
     test_cases.each do |input_string, expected_output|
       it "display the cli_view in a grid which represent 0 1 2 with symbol . X O
         correspondingly, input string: #{input_string}" do
-        actual_output = cli_view.display_grid(input_string)
+        actual_output = cli_view.make_grid(input_string)
 
         expect(actual_output).to eql expected_output
       end
@@ -65,16 +65,16 @@ describe CLIView do
     end
   end
 
-  describe '#display_row' do
+  describe '#make_row' do
     it 'take a string and return a string' do
-      expect(cli_view.display_row('000')).to be_a(String)
+      expect(cli_view.make_row('000')).to be_a(String)
     end
 
     it 'if given "000", return a string representation of an empty row' do
       input = '000'
       expected_output = '| . . . |'
 
-      expect(cli_view.display_row(input)).to eql expected_output
+      expect(cli_view.make_row(input)).to eql expected_output
     end
 
     test_cases = {
@@ -88,7 +88,7 @@ describe CLIView do
 
     test_cases.each do |input, expected_output|
       it "represent 0, 1, 2 with symbol ., X, O correspondingly, input: #{input}, expected output: #{expected_output}" do
-        expect(cli_view.display_row(input)).to eql expected_output
+        expect(cli_view.make_row(input)).to eql expected_output
       end
     end
   end
